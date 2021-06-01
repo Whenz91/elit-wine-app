@@ -1,4 +1,5 @@
 const Wine = require("../models/Wine.js");
+const { inputDataValidation } = require("../validate");
 
 // Get all wine
 module.exports.getWines = async (req, res) => {
@@ -44,9 +45,12 @@ module.exports.deleteWine = async (req, res) => {
 
 // Create wine
 module.exports.createWine = async (req, res) => {
+    inputDataValidation(req.body);
     try {
         const wine = new Wine(req.body);
-        wine.mainImage = req.file;
+        if(wine.mainImage) {
+            wine.mainImage = `${req.protocol}://${req.get('host')}/${req.file.destination}${req.file.filename}`;
+        }
 
         const savedWine = await wine.save();
         res.status(201).send(`Successfully created the new item with the following name ${savedWine.name}.`);
@@ -58,11 +62,12 @@ module.exports.createWine = async (req, res) => {
 
 // Update wine
 module.exports.updateWine = async (req, res) => {
-    const { id } = req.params;
-    const data = req.body;
+    inputDataValidation(req.body);
     try {
-        await Wine.updateOne({ _id: id }, data);
-        res.send("Successfully updated the item.");
+        const { id } = req.params;
+        await Wine.updateOne({ _id: id }, req.body);
+
+        res.send(`Successfully updated the item.`);
     } catch(error) {
         console.log(error);
         res.status(400).send(`Opss! We have some error: ${error}`);

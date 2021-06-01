@@ -15,7 +15,7 @@ const wineSchema = new mongoose.Schema({
         type: String,
         enum: {
             values: ['White', 'Red', 'Rose'],
-            message: '{VALUE} is not supported'
+            message: '{VALUE} is not supported. Please choose from these: Red, White, Rose!'
         }
     },
     size: Number,

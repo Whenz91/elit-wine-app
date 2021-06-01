@@ -10,7 +10,7 @@ mongoose.connect(
     process.env.DB_CONNECT,
     {
         useNewUrlParser: true,
-        useUnifiedTopology: true
+        useUnifiedTopology: true,
     }).then(() => {
         console.log(`Connected to Mongo!`);
     }).catch(error => {

@@ -1,4 +1,4 @@
-const Joi = require("@hapi/joi");
+const Joi = require("joi");
 
 module.exports.registerValidation = async (data) => {
     const schema = {
@@ -12,7 +12,7 @@ module.exports.registerValidation = async (data) => {
         return value;
     }
     catch (err) {
-        return err
+        return err;
     }
 }
 
@@ -27,6 +27,36 @@ module.exports.loginValidation = async (data) => {
         return value;
     }
     catch (err) {
-        return err
+        return err;
+    }
+}
+module.exports.inputDataValidation = async (data) => {
+    const schema = {
+        name: Joi.string().alphanum().trim().required(),
+        price: Joi.number().required(),
+        varietyOfWine: Joi.string().trim(),
+        typeOfWine: Joi.string().trim(),
+        size: Joi.number(),
+        alcoholVolume: Joi.number(),
+        vintage: Joi.number(),
+        origin: {
+            country:  Joi.string().alphanum().trim(),
+            region: Joi.string().alphanum().trim()
+        },
+        longDescription: Joi.string().trim(),
+        notes: {
+            color: Joi.string().trim(),
+            taste: Joi.string().trim(),
+            composition: Joi.string().trim(),
+            recommenFood: Joi.string().trim()
+        }
+    }
+    
+    try {
+        const value = await schema.validateAsync(data);
+        return value;
+    }
+    catch (err) {
+        return err;
     }
 }
